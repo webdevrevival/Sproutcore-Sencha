@@ -1,4 +1,4 @@
-Touchodo.States.startup = SC.State.design({
+Touchodo.StartupState = SC.State.design({
   enterState: function() {
     SC.RunLoop.begin();
 

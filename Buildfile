@@ -7,8 +7,9 @@
 # For example, this tells SproutCore's build tools that your requires
 # the SproutCore framework.
 config :all, :required => [
-  :sproutcore,
-  "sencha-1.1"
+  "sproutcore",
+  "sencha-1.1",
+  "sproutcha"
 ]
 
 # In addition to this Buildfile, which gives settings for your entire project,

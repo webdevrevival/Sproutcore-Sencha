@@ -5,7 +5,7 @@ Touchodo.statechart = SC.Object.create(SC.StatechartManager, {
   rootState: SC.State.design({
     initialSubstate: 'startup',
 
-    startup: SC.State.plugin('Touchodo.States.startup'),
-    started: SC.State.plugin('Touchodo.States.started')
+    startup: SC.State.plugin('Touchodo.StartupState'),
+    started: SC.State.plugin('Touchodo.StartedState')
   })
 });

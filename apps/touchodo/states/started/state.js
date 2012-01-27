@@ -1,7 +1,12 @@
-Touchodo.States.started = SC.State.design({
+Touchodo.StartedState = SC.State.design({
 
   enterState: function() {
-    Touchodo.SENCHA_VIEWPORT.setActiveItem(1);
+    //Touchodo.SENCHA_VIEWPORT.setActiveItem(1);
+    Touchodo.store.createRecord(Touchodo.Todo, { id: 1, description: "Integrate Sencha", isFinished: false });
+    Touchodo.store.createRecord(Touchodo.Todo, { id: 2, description: "Fix Models", isFinished: false });
+    Touchodo.store.createRecord(Touchodo.Todo, { id: 3, description: "Fix Controllers", isFinished: false });
+
+    Touchodo.todosController.set('content', Touchodo.store.find('Touchodo.Todo'));
   }
 
 });

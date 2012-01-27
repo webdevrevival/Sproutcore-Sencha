@@ -1,9 +1,11 @@
 if (typeof Ext === 'undefined') {
-  Touchodo.Record = SC.Record.extend({});
+  Sproutcha.Record = SC.Record.extend({});
 } else {
 
-  Touchodo.Record = SC.Record.extend({
+  Sproutcha.Record = SC.Record.extend({
 
+    ext_data_changes: 0,
+    _ext_fields: null,
 
     /*
      * Ensure that we register an Ext model upon creation of the first record.
@@ -22,9 +24,35 @@ if (typeof Ext === 'undefined') {
           }
         }
 
+        this._ext_fields = fields;
+
         Ext.regModel(modelName, {
-          fields: fields
+          fields: this._ext_fields
         });
+      }
+    },
+
+
+
+    /*
+     * Create a property that can be more easily observed by controllers
+     * that are watching for changes.
+     */
+    set: function(key, value) {
+      var update = false;
+
+      if (this._ext_fields.contains(key)) {
+        var current = this.get(key);
+
+        if (current !== value) {
+          update = true;
+        }
+      }
+
+      sc_super();
+
+      if (update) {
+        this.incrementProperty('ext_data_changes');
       }
     },
 
@@ -37,10 +65,10 @@ if (typeof Ext === 'undefined') {
       var modelName = this.constructor.toString().split('.').lastObject();
       var hash = {};
 
-      for (key in this) {
+      for (key in this._ext_fields) {
         if (key === this.primaryKey) {
           hash[key] = this.get(key);
-        } else if (SC.kindOf(this[key], SC.RecordAttribute)) {
+        } else {
           hash[key] = this._convert_to_ext_data(this.get(key));
         }
       }

@@ -1,6 +1,4 @@
-sc_require('models/base');
-
-Touchodo.Todo = Touchodo.Record.extend({
+Touchodo.Todo = Sproutcha.Record.extend({
   primaryKey: 'id',
 
   description: SC.Record.attr(String),
