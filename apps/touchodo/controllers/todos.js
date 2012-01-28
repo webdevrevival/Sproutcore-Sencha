@@ -1,10 +1,6 @@
 Touchodo.todosController = SC.ArrayController.create({
 
-  ext_store: new Ext.data.JsonStore({
-    model: 'Todo',
-
-    data: []
-  }),
+  ext_store: null,
 
   content: null,
 
@@ -13,6 +9,16 @@ Touchodo.todosController = SC.ArrayController.create({
     var content = this.get('content');
         
     if (!SC.none(content)) {
+      if (SC.none(ext_store)) {
+        ext_store = new Ext.data.JsonStore({
+          model: 'Todo',
+
+          data: []
+        });
+
+        this.set('ext_store', ext_store);
+      }
+
       var data = content.getEach('ext_data').filter(function(d) { return !SC.none(d) });
 
       if (!SC.none(data) && data.get('length') > 0) {

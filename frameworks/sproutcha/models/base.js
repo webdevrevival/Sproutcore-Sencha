@@ -1,37 +1,9 @@
 if (typeof Ext === 'undefined') {
   Sproutcha.Record = SC.Record.extend({});
 } else {
-
   Sproutcha.Record = SC.Record.extend({
 
     ext_data_changes: 0,
-    _ext_fields: null,
-
-    /*
-     * Ensure that we register an Ext model upon creation of the first record.
-     */
-    init: function() {
-      sc_super();
-
-      var modelName = this.constructor.toString().split('.').lastObject();
-
-      if (!Ext.ModelMgr.isRegistered(modelName)) {
-        var fields = [];
-
-        for (key in this) {
-          if (SC.kindOf(this[key], SC.RecordAttribute)) {
-            fields.push(key);
-          }
-        }
-
-        this._ext_fields = fields;
-
-        Ext.regModel(modelName, {
-          fields: this._ext_fields
-        });
-      }
-    },
-
 
 
     /*
@@ -61,20 +33,21 @@ if (typeof Ext === 'undefined') {
     /*
      * Returns an object suitable for Ext stores.
      */
-    toExtData: function() {
+    ext_data: function() {
+      var self = this;
       var modelName = this.constructor.toString().split('.').lastObject();
       var hash = {};
 
-      for (key in this._ext_fields) {
-        if (key === this.primaryKey) {
-          hash[key] = this.get(key);
+      this._ext_fields.forEach(function(field) {
+        if (field === self.primaryKey) {
+          hash[field] = self.get(field);
         } else {
-          hash[key] = this._convert_to_ext_data(this.get(key));
+          hash[field] = self._convert_to_ext_data(self.get(field));
         }
-      }
+      });
 
       return hash;
-    },
+    }.property('ext_data_changes').cacheable(),
 
 
  
@@ -104,10 +77,10 @@ if (typeof Ext === 'undefined') {
       } 
       
       /*
-       * Check to see if the object responds to toExtData()
+       * Check to see if the object responds to ext_data
        */
-      if (obj.toExtData) {
-        return obj.toExtData();
+      if (obj.ext_data) {
+        return obj.get('ext_data');
       } else { 
         return obj;
       } 
@@ -115,4 +88,29 @@ if (typeof Ext === 'undefined') {
 
   });
 
+  SC.mixin(Sproutcha.Record, {
+    registerModels: function() {
+      Sproutcha.Record.subclasses.forEach(function(klass) {
+        var modelName = klass.toString().split('.').lastObject();
+
+        if (!Ext.ModelMgr.isRegistered(modelName)) {
+          var fields = [];
+
+          for (key in klass.prototype) {
+            if (SC.kindOf(klass.prototype[key], SC.RecordAttribute)) {
+              fields.push(key);
+            }
+          }
+
+          Ext.regModel(modelName, {
+            fields: fields 
+          });
+
+          klass.prototype._ext_fields = fields;
+        }
+      });
+    }
+  });
+
+  SC.ready(Sproutcha.Record, 'registerModels');
 }

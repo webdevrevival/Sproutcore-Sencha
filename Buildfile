@@ -8,7 +8,6 @@
 # the SproutCore framework.
 config :all, :required => [
   "sproutcore",
-  "sencha-1.1",
   "sproutcha"
 ]
 

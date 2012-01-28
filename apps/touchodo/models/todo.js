@@ -3,5 +3,7 @@ Touchodo.Todo = Sproutcha.Record.extend({
 
   description: SC.Record.attr(String),
   isFinished: SC.Record.attr(Boolean),
-  comments: SC.Record.toMany('Touchodo.Comment', { isMaster: NO })
+  comments: SC.Record.toMany('Touchodo.Comment', { isMaster: NO }),
+
+  modelName: 'Todo'
 });

@@ -4,10 +4,18 @@ Touchodo.MainPane = Sproutcha.TabPane.extend({
 
   todos: Sproutcha.View.extend({
     init: function() {
-      var ext = new Ext.Panel({
+      var ext = new Ext.List({
+        fullscreen: false,
+
+        layout: 'fit',
+
         title: 'Todos',
+
         iconCls: 'home',
-        html: 'Todos Go Here'
+
+        itemTpl: '<div>{description}</div>',
+
+        store: Touchodo.todosController.get('ext_store')
       });
 
       this.set('ext', ext);

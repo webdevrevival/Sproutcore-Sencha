@@ -1,0 +1,3 @@
+config "sproutcha", :required => [
+  "sencha-1.1"
+]
