@@ -23,6 +23,8 @@ Sproutcha.TabPane = Sproutcha.ContainerView.extend({
 
           layout: 'fit',
 
+          cardSwitchAnimation: 'fade',
+
           tabBar: {
             dock: 'bottom',
 

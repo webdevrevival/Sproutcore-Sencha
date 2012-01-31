@@ -1,0 +1,20 @@
+$tick-size: 24px;
+
+.completed-tick {
+  float: left;
+
+  width: $tick-size;
+  height: $tick-size;
+  margin-right: 5px;
+
+  background-repeat: no-repeat;
+  background-size: $tick-size $tick-size;
+
+  &.inactive {
+    background-image: sc_static('tick-inactive.png');
+  }
+
+  &.active {
+    background-image: sc_static('tick-active.png');
+  }
+}
