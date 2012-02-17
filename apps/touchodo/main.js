@@ -11,7 +11,7 @@ Touchodo.main = function main() {
   /*
    * This function should be super-simple. Just initalize our statechart!
    */
-  Touchodo.statechart.initStatechart();
+  Touchodo.initStatechart();
 
 };
 

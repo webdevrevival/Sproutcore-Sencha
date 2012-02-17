@@ -1,4 +1,4 @@
-Touchodo.StartedState = SC.State.design({
+Touchodo.StartingState = SC.State.design({
 
   enterState: function() {
     Touchodo.store.createRecord(Touchodo.Todo, { id: 1, description: "Integrate Sencha", isFinished: false });

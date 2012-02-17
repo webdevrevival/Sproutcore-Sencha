@@ -10,8 +10,20 @@ Sproutcha.ArrayController = SC.ArrayController.extend({
         
     if (!SC.none(content)) {
       if (SC.none(ext_store)) {
+
+        // If there is no content, we can't figure out
+        // the modelName, but we don't really need to
+        // since there is no content.
+        if (content.get('length') === 0) {
+          return;
+        }
+
+        var modelName = SC._object_className(content.get('firstObject').constructor);
+
+        modelName = modelName.split('.').lastObject();
+
         ext_store = new Ext.data.JsonStore({
-          model: 'Todo',
+          model: modelName,
 
           data: []
         });

@@ -1,4 +1,11 @@
-Touchodo.TodosListView = Sproutcha.View.extend({
+Touchodo.TodosView = Sproutcha.View.extend({
+
+  _list: null,
+
+  ext_storeBinding: 'Touchodo.todosController.ext_store',
+  ext_storeDidChange: function() {
+    this._list.bindStore(this.get('ext_store'));
+  }.observes('ext_store'),
 
   init: function() {
     var list = new Ext.List({
@@ -8,16 +15,18 @@ Touchodo.TodosListView = Sproutcha.View.extend({
         }
       }),
 
-      store: Touchodo.todosController.get('ext_store')
+      store: null
     });
 
     list.on('itemtap', function(listView, index, listItem, evt) {
       var todo = Touchodo.todosController.objectAt(index);
 
       if (!SC.none(todo)) {
-        Touchodo.statechart.sendAction('toggleTodoAction', todo);
+        Touchodo.sendAction('toggleTodoAction', todo);
       }
     });
+
+    this._list = list;
 
     var panel = new Ext.Panel({
       title: 'Todos',
