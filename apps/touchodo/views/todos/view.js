@@ -1,54 +1,29 @@
-Touchodo.TodosView = Sproutcha.View.extend({
+sc_require('views/todos/list');
+sc_require('views/todos/detail');
 
-  _list: null,
+Touchodo.TodosView = Sproutcha.ContainerView.extend({
 
-  ext_storeBinding: 'Touchodo.todosController.ext_store',
-  ext_storeDidChange: function() {
-    this._list.bindStore(this.get('ext_store'));
-  }.observes('ext_store'),
+  extOptions: {
+    title: 'Todos',
 
-  init: function() {
-    var list = new Ext.List({
-      itemTpl: new Ext.XTemplate("<div class='todo'><span class='completed-tick {[this.imgClass(values)]}'></span>{description}</div>", {
-        imgClass: function(values) {
-          return values.isFinished ? 'active' : 'inactive';
-        }
-      }),
+    iconCls: 'home',
 
-      store: null
-    });
+    fullscreen: true,
 
-    list.on('itemtap', function(listView, index, listItem, evt) {
-      var todo = Touchodo.todosController.objectAt(index);
+    layout: 'card',
 
-      if (!SC.none(todo)) {
-        Touchodo.sendAction('toggleTodoAction', todo);
+    dockedItems: [
+      {
+        dock: 'top',
+        xtype: 'toolbar',
+        title: 'Loading...'
       }
-    });
+    ]
+  },
 
-    this._list = list;
+  childViews: 'listView detailView'.w(),
 
-    var panel = new Ext.Panel({
-      title: 'Todos',
-
-      iconCls: 'home',
-
-      layout: 'fit',
-
-      dockedItems: [
-        {
-          dock: 'top',
-          xtype: 'toolbar',
-          title: 'Todos'
-        }
-      ],
-
-      items: [
-        list
-      ]
-    });
-
-    this.set('ext', panel);
-  }
+  listView: Touchodo.TodosListView.extend(),
+  detailView: Touchodo.TodosDetailView.extend()
 
 });

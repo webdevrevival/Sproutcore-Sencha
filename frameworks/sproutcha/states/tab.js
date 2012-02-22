@@ -1,22 +1,15 @@
 Sproutcha.TabState = Sproutcha.State.design({
-
-  ext: null,
-
-  toolbarView: null,
-
   contentView: null,
 
   init: function() {
     sc_super();
 
-    var toolbarView = Sproutcha.ToolbarView.create();
-    var contentView = Sproutcha.View.create();
+    var contentView = this.get('contentView');
 
-    var panel = new Ext.Panel({
+    if (!SC.instanceOf(contentView, Sproutcha.View)) {
+      this.set('contentView', contentView.create());
+    }
 
-    });
-
-    this.set('ext', panel);
+    Sproutcha.TabApplicationManager.registerTab(this);
   }
-
 });

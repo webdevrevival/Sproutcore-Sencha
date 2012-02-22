@@ -4,8 +4,6 @@
 // ==========================================================================
 /*globals Touchodo */
 
-sc_require('states/statechart');
-
 Touchodo.main = function main() {
 
   /*

@@ -78,15 +78,14 @@ Sproutcha.TabApplication = SC.Application.extend(SC.StatechartManager, {
     for (key in tabStates) {
       var state = tabStates[key];
 
+      // Check to make sure we aren't a state plugin
       if (state.statePlugin) {
         tabStates[key] = state = state();
       }
 
-      if (!SC.kindOf(state, Sproutcha.TabState)) {
+      if (SC.kindOf(state, SC.State) && !SC.kindOf(state, Sproutcha.TabState)) {
         throw new Error("All tabStates must extend from Sproutcha.TabState; '%@' does not.".fmt(key));
       }
-
-      tabStates[key].application = this;
     }
 
     var rootState = SC.State.design({
@@ -95,13 +94,13 @@ Sproutcha.TabApplication = SC.Application.extend(SC.StatechartManager, {
       startup: SC.State.design({
         enterState: function() {
           // _initExtApp() will call self.gotoState('starting') when the Ext application launches
-          self._initExtApp();
+          self._initExtApp(this);
         }
       }),
 
       starting: self.startingState || SC.State.design({
         enterState: function() {
-          self.gotoState('started');
+          self.gotoState('started', this);
         }
       }),
 
@@ -113,7 +112,7 @@ Sproutcha.TabApplication = SC.Application.extend(SC.StatechartManager, {
     this.set('rootState', rootState);
   },
 
-  _initExtApp: function() {
+  _initExtApp: function(currentState) {
     var self = this;
 
     var app = new Ext.Application({
@@ -122,22 +121,7 @@ Sproutcha.TabApplication = SC.Application.extend(SC.StatechartManager, {
       launch: function() {
         SC.RunLoop.begin();
 
-        var tabStates = self.get('tabStates');
-
-        var tabs = [];
-        for (key in tabStates) {
-          var state = tabStates[key];
-
-          if (!SC.instanceOf(state, Sproutcha.TabState)) {
-            state = state.create();
-          }
-
-          if (!SC.instanceOf(state.contentView, Sproutcha.View)) {
-            state.contentView = state.contentView.create();
-          }
-
-          tabs.pushObject(state.contentView.get('ext'));
-        };
+        var tabs = Sproutcha.TabApplicationManager.get('tabs');
 
         var tabPanel = new Ext.TabPanel({
           fullscreen: true,
@@ -156,17 +140,31 @@ Sproutcha.TabApplication = SC.Application.extend(SC.StatechartManager, {
             }
           },
 
-          items: tabs
+          items: tabs.getEach('contentView').map(function(view) {
+            if (!SC.none(view)) {
+              return view.get('ext');
+            }
+          })
         });
 
         SC.RunLoop.end();
 
         self.set('extTabPanel', tabPanel);
-        self.gotoState('starting');
+        self.gotoState('starting', currentState);
       }
     });
 
     this.set('extApplication', app);
   }
 
+});
+
+Sproutcha.TabApplicationManager = SC.Object.create({
+  tabs: [],
+
+  registerTab: function(tab) {
+    var tabs = this.get('tabs');
+
+    tabs.pushObject(tab);
+  }
 });

@@ -6,10 +6,8 @@ Touchodo.StartingState = SC.State.design({
     Touchodo.store.createRecord(Touchodo.Todo, { id: 3, description: "Fix Controllers", isFinished: false });
 
     Touchodo.todosController.set('content', Touchodo.store.find('Touchodo.Todo'));
-  },
 
-  toggleTodoAction: function(todo) {
-    todo.toggleProperty('isFinished');
+    this.gotoState('started', this);
   }
 
 });
