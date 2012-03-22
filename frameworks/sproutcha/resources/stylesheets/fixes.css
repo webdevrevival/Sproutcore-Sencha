@@ -1,0 +1,24 @@
+.x-form-fieldset .x-form-field-container {
+  border-bottom: 1px solid #fff; // Rmoves an ugly extra line
+}
+
+.x-form-fieldset .x-list {
+  -webkit-border-radius: 0.4em;
+  border-radius: 0.4em;
+}
+
+.x-form-fieldset .x-list .x-list-item:first-child {
+  -webkit-border-top-left-radius: 0.4em;
+  border-top-left-radius: 0.4em;
+  -webkit-border-top-right-radius: 0.4em;
+  border-top-right-radius: 0.4em;
+}
+
+.x-form-fieldset .x-list .x-list-item:last-child {
+  border-bottom: none !important; // Removes an ugly extra line
+
+  -webkit-border-bottom-left-radius: 0.4em;
+  border-bottom-left-radius: 0.4em;
+  -webkit-border-bottom-right-radius: 0.4em;
+  border-bottom-right-radius: 0.4em;
+}

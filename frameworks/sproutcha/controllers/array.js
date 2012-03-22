@@ -7,7 +7,7 @@ Sproutcha.ArrayController = SC.ArrayController.extend({
   contentDidChange: function() {
     var ext_store = this.get('ext_store'); 
     var content = this.get('content');
-        
+
     if (!SC.none(content)) {
       if (SC.none(ext_store)) {
 
@@ -35,8 +35,10 @@ Sproutcha.ArrayController = SC.ArrayController.extend({
 
       if (!SC.none(data) && data.get('length') > 0) {
         ext_store.loadData(data);
+      } else {
+        ext_store.loadData([]);
       }
     }
-  }.observes('*content.@each.ext_data_changes')
+  }.observes('*content.@each.ext_data_changes', '*content.length')
 
 });

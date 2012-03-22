@@ -140,7 +140,7 @@ Sproutcha.TabApplication = SC.Application.extend(SC.StatechartManager, {
             }
           },
 
-          items: tabs.getEach('contentView').map(function(view) {
+          items: tabs.getEach('containerView').map(function(view) {
             if (!SC.none(view)) {
               return view.get('ext');
             }

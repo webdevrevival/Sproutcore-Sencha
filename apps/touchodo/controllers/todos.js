@@ -1,1 +1,2 @@
-Touchodo.todosController = Sproutcha.ArrayController.create({});
+Touchodo.todosController = Sproutcha.ArrayController.create({
+});

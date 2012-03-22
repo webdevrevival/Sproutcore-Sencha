@@ -75,6 +75,13 @@ if (typeof Ext === 'undefined') {
         
         return newEnum;
       } 
+
+      /*
+       * Check for an SC.DateTime
+       */
+      if (SC.kindOf(obj, SC.DateTime)) {
+        return new Date(obj.get('milliseconds'));
+      }
       
       /*
        * Check to see if the object responds to ext_data
@@ -91,7 +98,10 @@ if (typeof Ext === 'undefined') {
   SC.mixin(Sproutcha.Record, {
     registerModels: function() {
       Sproutcha.Record.subclasses.forEach(function(klass) {
-        var modelName = klass.toString().split('.').lastObject();
+        var sklass = klass.toString();
+        var arr = sklass.split('.');
+
+        var modelName = arr.lastObject();
 
         if (!Ext.ModelMgr.isRegistered(modelName)) {
           var fields = [];
@@ -102,7 +112,7 @@ if (typeof Ext === 'undefined') {
             }
           }
 
-          Ext.regModel(modelName, {
+          SC.getPath(sklass).ext_model = Ext.regModel(modelName, {
             fields: fields 
           });
 
